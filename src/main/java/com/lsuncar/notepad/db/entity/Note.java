@@ -1,5 +1,6 @@
 package com.lsuncar.notepad.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -42,6 +43,7 @@ public class Note extends BaseEntity
 	@Column ( name = "active" )
 	private Boolean active;
 
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn ( name = "user_id", nullable = false, referencedColumnName = "id")
 	private User user;

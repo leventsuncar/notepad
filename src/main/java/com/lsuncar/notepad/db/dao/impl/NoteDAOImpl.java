@@ -83,6 +83,7 @@ public class NoteDAOImpl implements NoteDAO
 			{
 				Note note = noteOptional.get();
 				note.setActive( false );
+				note.setUpdatedAt( System.currentTimeMillis() );
 				NoteDTO noteDTO = getMapper().toNoteDTO( note );
 				save( noteDTO );
 				return true;
@@ -119,6 +120,9 @@ public class NoteDAOImpl implements NoteDAO
 		try
 		{
 			Note note = getMapper().toNote( noteDTO );
+			note.setActive( true );
+			note.setUpdatedAt( System.currentTimeMillis() );
+			note.setCreatedAt( System.currentTimeMillis() );
 			Note savedNote = noteRepository.save( note );
 			NoteDTO savedNoteDTO = getMapper().toNoteDTO( savedNote );
 			return savedNoteDTO;

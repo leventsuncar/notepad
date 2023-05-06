@@ -2,9 +2,7 @@ package com.lsuncar.notepad.service.impl;
 
 import com.lsuncar.notepad.core.exception.EntityNotFoundException;
 import com.lsuncar.notepad.db.dao.UserDAO;
-import com.lsuncar.notepad.db.entity.User;
 import com.lsuncar.notepad.dto.UserDTO;
-import com.lsuncar.notepad.dto.mapper.UserMapper;
 import com.lsuncar.notepad.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

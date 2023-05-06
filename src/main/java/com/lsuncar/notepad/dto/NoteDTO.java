@@ -1,6 +1,6 @@
 package com.lsuncar.notepad.dto;
 
-import com.lsuncar.notepad.db.entity.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 @Data
@@ -10,5 +10,6 @@ public class NoteDTO
 	private String title;
 	private String content;
 	private Boolean active;
+	@JsonIgnore
 	private UserDTO user;
 }
