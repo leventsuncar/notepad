@@ -18,10 +18,6 @@ public class UserServiceImpl implements UserService
 	@Autowired
 	private UserDAO userDAO;
 
-	private UserMapper getMapper()
-	{
-		return UserMapper.INSTANCE;
-	}
 
 	@Override
 	public UserDTO signup ( UserDTO userDTO ) throws Exception
@@ -29,10 +25,8 @@ public class UserServiceImpl implements UserService
 		try
 		{
 			//TODO kontroller
-			User user = getMapper().toUser( userDTO );
-			User savedUser = userDAO.save( user );
-			UserDTO savedUserDTO = getMapper().toUserDTO( savedUser );
-			return savedUserDTO;
+			UserDTO savedUser = userDAO.save( userDTO );
+			return savedUser;
 		}
 		catch ( Exception e )
 		{
@@ -45,12 +39,9 @@ public class UserServiceImpl implements UserService
 	{
 		try
 		{
-			User user = userDAO.findUserById( userId );
+			UserDTO user = userDAO.findUserById( userId );
 			if ( nonNull( user ) )
-			{
-				UserDTO userDTO = getMapper().toUserDTO( user );
-				return userDTO;
-			}
+				return user;
 			else
 				throw new EntityNotFoundException( "Not found" );
 		}

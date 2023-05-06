@@ -3,12 +3,17 @@ package com.lsuncar.notepad.db.dao.impl;
 import com.lsuncar.notepad.db.dao.NoteDAO;
 import com.lsuncar.notepad.db.entity.Note;
 import com.lsuncar.notepad.db.repo.NoteRepository;
+import com.lsuncar.notepad.dto.NoteDTO;
+import com.lsuncar.notepad.dto.mapper.NoteMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static java.util.Objects.nonNull;
 
 @Component
 public class NoteDAOImpl implements NoteDAO
@@ -17,13 +22,27 @@ public class NoteDAOImpl implements NoteDAO
 	@Autowired
 	private NoteRepository noteRepository;
 
+	private NoteMapper getMapper ()
+	{
+		return NoteMapper.INSTANCE;
+	}
+
 	@Override
-	public List<Note> findNoteByUserId ( Long userId ) throws Exception
+	public List<NoteDTO> findNoteByUserId ( Long userId ) throws Exception
 	{
 		try
 		{
 			List<Note> noteList = noteRepository.findByUser_IdAndActiveIsTrueOrderByUpdatedAtDesc( userId );
-			return noteList;
+			List<NoteDTO> noteDTOList = new ArrayList<>();
+			if ( nonNull( noteList ) && !noteList.isEmpty() )
+			{
+				for ( Note note : noteList )
+				{
+					NoteDTO noteDTO = getMapper().toNoteDTO( note );
+					noteDTOList.add( noteDTO );
+				}
+			}
+			return noteDTOList;
 		}
 		catch ( Exception e )
 		{
@@ -32,12 +51,21 @@ public class NoteDAOImpl implements NoteDAO
 	}
 
 	@Override
-	public List<Note> findDeletedNoteByUserId ( Long userId ) throws Exception
+	public List<NoteDTO> findDeletedNoteByUserId ( Long userId ) throws Exception
 	{
 		try
 		{
 			List<Note> noteList = noteRepository.findByUser_IdAndActiveIsFalseOrderByUpdatedAtDesc( userId );
-			return noteList;
+			List<NoteDTO> noteDTOList = new ArrayList<>();
+			if ( nonNull( noteList ) && !noteList.isEmpty() )
+			{
+				for ( Note note : noteList )
+				{
+					NoteDTO noteDTO = getMapper().toNoteDTO( note );
+					noteDTOList.add( noteDTO );
+				}
+			}
+			return noteDTOList;
 		}
 		catch ( Exception e )
 		{
@@ -55,13 +83,12 @@ public class NoteDAOImpl implements NoteDAO
 			{
 				Note note = noteOptional.get();
 				note.setActive( false );
-				save( note );
+				NoteDTO noteDTO = getMapper().toNoteDTO( note );
+				save( noteDTO );
 				return true;
 			}
 			else
-			{
 				return false;
-			}
 		}
 		catch ( Exception e )
 		{
@@ -87,12 +114,34 @@ public class NoteDAOImpl implements NoteDAO
 	}
 
 	@Override
-	public Note save ( Note note ) throws Exception
+	public NoteDTO save ( NoteDTO noteDTO ) throws Exception
 	{
 		try
 		{
+			Note note = getMapper().toNote( noteDTO );
 			Note savedNote = noteRepository.save( note );
-			return savedNote;
+			NoteDTO savedNoteDTO = getMapper().toNoteDTO( savedNote );
+			return savedNoteDTO;
+		}
+		catch ( Exception e )
+		{
+			throw e;
+		}
+	}
+
+	@Override
+	public NoteDTO findNoteById ( Long noteId ) throws Exception
+	{
+		try
+		{
+			Optional<Note> note = noteRepository.findById( noteId );
+			if ( note.isPresent() )
+			{
+				NoteDTO noteDTO = getMapper().toNoteDTO( note.get() );
+				return noteDTO;
+			}
+			else
+				return null;
 		}
 		catch ( Exception e )
 		{

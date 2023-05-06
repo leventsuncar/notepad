@@ -10,6 +10,7 @@ public interface NoteMapper
 {
 	NoteMapper INSTANCE = Mappers.getMapper( NoteMapper.class );
 
+
 	NoteDTO toNoteDTO ( Note note );
 
 	Note toNote ( NoteDTO noteDTO );

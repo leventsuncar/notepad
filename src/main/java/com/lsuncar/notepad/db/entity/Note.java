@@ -43,6 +43,8 @@ public class Note extends BaseEntity
 	private Boolean active;
 
 	@ManyToOne
-	@JoinColumn ( name = "user_id", nullable = false )
+	@JoinColumn ( name = "user_id", nullable = false, referencedColumnName = "id")
 	private User user;
+
+	//TODO notlar paylaşılabilir olacak
 }

@@ -10,5 +10,5 @@ public class NoteDTO
 	private String title;
 	private String content;
 	private Boolean active;
-	private User user;
+	private UserDTO user;
 }
