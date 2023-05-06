@@ -11,5 +11,6 @@ public class UserDTO
 	private Long id;
 	private String username;
 	private String passwd;
+	private String email;
 	private List<Note> notes;
 }

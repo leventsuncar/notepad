@@ -1,11 +1,8 @@
 package com.lsuncar.notepad.db.dao.impl;
 
-import com.lsuncar.notepad.common.exception.EntityNotFoundException;
 import com.lsuncar.notepad.db.dao.UserDAO;
 import com.lsuncar.notepad.db.entity.User;
 import com.lsuncar.notepad.db.repo.UserRepository;
-import com.lsuncar.notepad.dto.UserDTO;
-import com.lsuncar.notepad.dto.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,13 +14,12 @@ public class UserDAOImpl implements UserDAO
 	private UserRepository userRepository;
 
 	@Override
-	public UserDTO findUserById ( Long userId ) throws Exception
+	public User findUserById ( Long userId ) throws Exception
 	{
 		try
 		{
 			User user = userRepository.findByIdAndActiveIsTrue( userId );
-			UserDTO userDTO = UserMapper.INSTANCE.toUserDTO( user );
-			return userDTO;
+			return user;
 		}
 		catch ( Exception e )  //TODO Custom Exception
 		{
@@ -32,14 +28,15 @@ public class UserDAOImpl implements UserDAO
 	}
 
 	@Override
-	public UserDTO save ( UserDTO userDTO ) throws Exception
+	public User save ( User user ) throws Exception
 	{
 		try
 		{
-			User user = UserMapper.INSTANCE.toUser( userDTO );
+			user.setActive( true );
+			user.setCreatedAt( System.currentTimeMillis() );
+			user.setUpdatedAt( System.currentTimeMillis() );
 			User savedUser = userRepository.save( user );
-			UserDTO savedUserDTO = UserMapper.INSTANCE.toUserDTO( savedUser );
-			return savedUserDTO;
+			return savedUser;
 		}
 		catch ( Exception e )
 		{

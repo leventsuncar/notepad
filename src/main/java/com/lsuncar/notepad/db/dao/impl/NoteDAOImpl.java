@@ -3,17 +3,12 @@ package com.lsuncar.notepad.db.dao.impl;
 import com.lsuncar.notepad.db.dao.NoteDAO;
 import com.lsuncar.notepad.db.entity.Note;
 import com.lsuncar.notepad.db.repo.NoteRepository;
-import com.lsuncar.notepad.dto.NoteDTO;
-import com.lsuncar.notepad.dto.mapper.NoteMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-
-import static java.util.Objects.nonNull;
 
 @Component
 public class NoteDAOImpl implements NoteDAO
@@ -22,27 +17,13 @@ public class NoteDAOImpl implements NoteDAO
 	@Autowired
 	private NoteRepository noteRepository;
 
-	private NoteMapper getMapper ()
-	{
-		return NoteMapper.INSTANCE;
-	}
-
 	@Override
-	public List<NoteDTO> findNoteByUserId ( Long userId ) throws Exception
+	public List<Note> findNoteByUserId ( Long userId ) throws Exception
 	{
 		try
 		{
-			List<NoteDTO> noteDTOList = new ArrayList<>();
 			List<Note> noteList = noteRepository.findByUser_IdAndActiveIsTrueOrderByUpdatedAtDesc( userId );
-			if ( nonNull( noteList ) && !noteList.isEmpty() )
-			{
-				for ( Note note : noteList )
-				{
-					NoteDTO noteDTO = getMapper().toNoteDTO( note );
-					noteDTOList.add( noteDTO );
-				}
-			}
-			return noteDTOList;
+			return noteList;
 		}
 		catch ( Exception e )
 		{
@@ -51,21 +32,12 @@ public class NoteDAOImpl implements NoteDAO
 	}
 
 	@Override
-	public List<NoteDTO> findDeletedNoteByUserId ( Long userId ) throws Exception
+	public List<Note> findDeletedNoteByUserId ( Long userId ) throws Exception
 	{
 		try
 		{
-			List<NoteDTO> noteDTOList = new ArrayList<>();
 			List<Note> noteList = noteRepository.findByUser_IdAndActiveIsFalseOrderByUpdatedAtDesc( userId );
-			if ( nonNull( noteList ) && !noteList.isEmpty() )
-			{
-				for ( Note note : noteList )
-				{
-					NoteDTO noteDTO = getMapper().toNoteDTO( note );
-					noteDTOList.add( noteDTO );
-				}
-			}
-			return noteDTOList;
+			return noteList;
 		}
 		catch ( Exception e )
 		{
@@ -76,28 +48,51 @@ public class NoteDAOImpl implements NoteDAO
 	@Override
 	public Boolean deleteNoteById ( Long noteId ) throws Exception
 	{
-		Optional<Note> noteOptional = noteRepository.findById( noteId );
-		if ( noteOptional.isPresent() )
+		try
 		{
-			Note note = noteOptional.get();
-			note.setActive( false );
+			Optional<Note> noteOptional = noteRepository.findById( noteId );
+			if ( noteOptional.isPresent() )
+			{
+				Note note = noteOptional.get();
+				note.setActive( false );
+				save( note );
+				return true;
+			}
+			else
+			{
+				return false;
+			}
 		}
-		return null;
+		catch ( Exception e )
+		{
+			throw e;
+		}
+
 	}
 
 	@Override
+	@Transactional
 	public Boolean deleteNotePermanentlyById ( Long noteId ) throws Exception
-	{
-		return null;
-	}
-
-	@Override
-	public NoteDTO save ( NoteDTO noteDTO ) throws Exception
 	{
 		try
 		{
+			noteRepository.deleteById( noteId );
+			return true;
+		}
+		catch ( Exception e )
+		{
+			throw e;
+		}
 
-			return null;
+	}
+
+	@Override
+	public Note save ( Note note ) throws Exception
+	{
+		try
+		{
+			Note savedNote = noteRepository.save( note );
+			return savedNote;
 		}
 		catch ( Exception e )
 		{

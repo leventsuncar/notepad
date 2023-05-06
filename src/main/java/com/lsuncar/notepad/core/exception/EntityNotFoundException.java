@@ -1,4 +1,4 @@
-package com.lsuncar.notepad.common.exception;
+package com.lsuncar.notepad.core.exception;
 
 public class EntityNotFoundException extends Exception
 {
