@@ -1,4 +1,4 @@
-package com.lsuncar.notepad.core.controller.req;
+package com.lsuncar.notepad.core.security.controller.req;
 
 import lombok.Data;
 

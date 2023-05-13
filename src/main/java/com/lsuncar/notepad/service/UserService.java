@@ -7,4 +7,6 @@ public interface UserService
 	UserDTO signup ( UserDTO userDTO ) throws Exception;
 
 	UserDTO findUserById ( Long userId ) throws Exception;
+
+	UserDTO findUserByUsername ( String username );
 }

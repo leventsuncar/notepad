@@ -11,48 +11,49 @@ import org.springframework.stereotype.Component;
 import static java.util.Objects.nonNull;
 
 @Component
-public class UserDAOImpl implements UserDAO
-{
+public class UserDAOImpl implements UserDAO {
 
-	@Autowired
-	private UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-	private UserMapper getMapper()
-	{
-		return UserMapper.INSTANCE;
-	}
+    private UserMapper getMapper() {
+        return UserMapper.INSTANCE;
+    }
 
-	@Override
-	public UserDTO findUserById ( Long userId )
-	{
-		try
-		{
-			User user = userRepository.findByIdAndActiveIsTrue( userId );
-			if ( nonNull( user ) )
-				return getMapper().toUserDTO( user );
-			else return null;
-		}
-		catch ( Exception e )
-		{
-			throw e;
-		}
-	}
+    @Override
+    public UserDTO findUserById(Long userId) {
+        try {
+            User user = userRepository.findByIdAndActiveIsTrue(userId);
+            if (nonNull(user))
+                return getMapper().toUserDTO(user);
+            else return null;
+        } catch (Exception e) {
+            throw e;
+        }
+    }
 
-	@Override
-	public UserDTO save ( UserDTO userDTO )
-	{
-		try
-		{
-			User user = getMapper().toUser( userDTO );
-			user.setActive( true );
-			user.setCreatedAt( System.currentTimeMillis() );
-			user.setUpdatedAt( System.currentTimeMillis() );
-			User savedUser = userRepository.save( user );
-			return getMapper().toUserDTO( savedUser );
-		}
-		catch ( Exception e )
-		{
-			throw e;
-		}
-	}
+    @Override
+    public UserDTO save(UserDTO userDTO) {
+        try {
+            User user = getMapper().toUser(userDTO);
+            user.setActive(true);
+            user.setCreatedAt(System.currentTimeMillis());
+            user.setUpdatedAt(System.currentTimeMillis());
+            User savedUser = userRepository.save(user);
+            return getMapper().toUserDTO(savedUser);
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    @Override
+    public UserDTO findUserByUsername(String username) {
+        try {
+            User user = userRepository.findUserByUsername(username);
+            UserDTO userDTO = getMapper().toUserDTO(user);
+            return userDTO;
+        } catch (Exception e) {
+            throw e;
+        }
+    }
 }

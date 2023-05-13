@@ -56,24 +56,28 @@ public class User extends BaseEntity implements UserDetails
 	@OneToMany ( mappedBy = "user" )
 	private List<Note> notes;
 
+	@JsonIgnore
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities ()
 	{
 		return null;
 	}
 
+	@JsonIgnore
 	@Override
 	public boolean isAccountNonExpired ()
 	{
 		return true;
 	}
 
+	@JsonIgnore
 	@Override
 	public boolean isAccountNonLocked ()
 	{
 		return true;
 	}
 
+	@JsonIgnore
 	@Override
 	public boolean isCredentialsNonExpired ()
 	{

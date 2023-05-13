@@ -7,4 +7,6 @@ public interface UserDAO
 	UserDTO findUserById ( Long userId ) throws Exception;
 
 	UserDTO save ( UserDTO user ) throws Exception;
+
+	UserDTO findUserByUsername ( String username );
 }
