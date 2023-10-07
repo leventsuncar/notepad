@@ -1,13 +1,7 @@
 package com.lsuncar.notepad.db.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -24,8 +18,6 @@ import java.util.List;
 @Entity
 @Table ( name = "user_" )
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class User extends BaseEntity implements UserDetails
 {
 	@Id
@@ -53,7 +45,7 @@ public class User extends BaseEntity implements UserDetails
 	private String password;
 
 	@JsonIgnore
-	@OneToMany ( mappedBy = "user" )
+	@OneToMany ( mappedBy = "user" , fetch = FetchType.LAZY)
 	private List<Note> notes;
 
 	@JsonIgnore
@@ -89,4 +81,7 @@ public class User extends BaseEntity implements UserDetails
 	{
 		return this.getActive();
 	}
+
+
+
 }
