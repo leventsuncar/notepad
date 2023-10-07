@@ -1,20 +1,22 @@
 package com.lsuncar.notepad.db.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table ( name = "note" )
@@ -24,29 +26,19 @@ import lombok.NoArgsConstructor;
 public class Note extends BaseEntity
 {
 	@Id
-	@GeneratedValue ( strategy = GenerationType.AUTO )
-	@Column ( name = "id" )
+	@GeneratedValue ( strategy = GenerationType.IDENTITY )
 	private Long id;
 
 	@Column ( name = "title" )
-	@NotNull
-	@NotBlank
-	@NotEmpty
 	private String title;
 
 	@Column ( name = "content" )
-	@NotNull
-	@NotBlank
-	@NotEmpty
 	private String content;
 
-	@Column ( name = "active" )
-	private Boolean active;
-
-	@JsonIgnore
 	@ManyToOne
-	@JoinColumn ( name = "user_id", nullable = false, referencedColumnName = "id")
-	private User user;
+	private User owner;
 
-	//TODO notlar paylaşılabilir olacak
+	@ManyToMany
+	@JoinTable ( name = "user_notes", joinColumns = @JoinColumn ( name = "note_id" ), inverseJoinColumns = @JoinColumn ( name = "user_id" ) )
+	private List<User> sharedUsers = new ArrayList<>();
 }

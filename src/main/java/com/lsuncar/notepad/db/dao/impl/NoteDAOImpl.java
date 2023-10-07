@@ -32,7 +32,7 @@ public class NoteDAOImpl implements NoteDAO
 	{
 		try
 		{
-			List<Note> noteList = noteRepository.findByUser_IdAndActiveIsTrueOrderByUpdatedAtDesc( userId );
+			List<Note> noteList = noteRepository.findNotesByOwner_Id( userId );
 			List<NoteDTO> noteDTOList = new ArrayList<>();
 			if ( nonNull( noteList ) && !noteList.isEmpty() )
 			{
@@ -53,24 +53,25 @@ public class NoteDAOImpl implements NoteDAO
 	@Override
 	public List<NoteDTO> findDeletedNoteByUserId ( Long userId ) throws Exception
 	{
-		try
-		{
-			List<Note> noteList = noteRepository.findByUser_IdAndActiveIsFalseOrderByUpdatedAtDesc( userId );
-			List<NoteDTO> noteDTOList = new ArrayList<>();
-			if ( nonNull( noteList ) && !noteList.isEmpty() )
-			{
-				for ( Note note : noteList )
-				{
-					NoteDTO noteDTO = getMapper().toNoteDTO( note );
-					noteDTOList.add( noteDTO );
-				}
-			}
-			return noteDTOList;
-		}
-		catch ( Exception e )
-		{
-			throw e;
-		}
+//		try
+//		{
+//			List<Note> noteList = noteRepository.findByUser_IdAndActiveIsFalseOrderByUpdatedAtDesc( userId );
+//			List<NoteDTO> noteDTOList = new ArrayList<>();
+//			if ( nonNull( noteList ) && !noteList.isEmpty() )
+//			{
+//				for ( Note note : noteList )
+//				{
+//					NoteDTO noteDTO = getMapper().toNoteDTO( note );
+//					noteDTOList.add( noteDTO );
+//				}
+//			}
+//			return noteDTOList;
+//		}
+//		catch ( Exception e )
+//		{
+//			throw e;
+//		}
+		return null;
 	}
 
 	@Override

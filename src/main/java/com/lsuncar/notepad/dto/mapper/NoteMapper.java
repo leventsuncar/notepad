@@ -5,11 +5,10 @@ import com.lsuncar.notepad.dto.NoteDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-@Mapper( componentModel = "lombok")
+@Mapper ( componentModel = "lombok" )
 public interface NoteMapper
 {
 	NoteMapper INSTANCE = Mappers.getMapper( NoteMapper.class );
-
 
 	NoteDTO toNoteDTO ( Note note );
 

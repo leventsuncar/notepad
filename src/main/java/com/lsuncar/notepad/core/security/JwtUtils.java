@@ -30,7 +30,7 @@ public class JwtUtils {
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 10)) //10 dk todo koşula bağla
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 25)) //10 dk todo koşula bağla
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }

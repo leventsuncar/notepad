@@ -118,7 +118,7 @@ public class NoteServiceImpl implements NoteService
 			NoteDTO noteDTO = new NoteDTO();
 			noteDTO.setContent( note.getContent() );
 			noteDTO.setTitle( note.getTitle() );
-			noteDTO.setUser( user );
+			noteDTO.setOwner( user );
 			NoteDTO savedNote = noteDAO.save( noteDTO );
 			return savedNote;
 		}

@@ -14,5 +14,5 @@ public class UserDTO
 	private String password;
 	private String email;
 	@JsonIgnore
-	private List<Note> notes;
+	private List<Note> ownedNotes;
 }

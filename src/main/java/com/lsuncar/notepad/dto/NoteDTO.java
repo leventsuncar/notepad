@@ -1,7 +1,8 @@
 package com.lsuncar.notepad.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 public class NoteDTO
@@ -10,6 +11,6 @@ public class NoteDTO
 	private String title;
 	private String content;
 	private Boolean active;
-	@JsonIgnore
-	private UserDTO user;
+	private UserDTO owner;
+	private List<UserDTO> sharedUsers;
 }
