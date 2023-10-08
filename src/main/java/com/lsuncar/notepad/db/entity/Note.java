@@ -19,26 +19,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table ( name = "note" )
+@Table(name = "note")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Note extends BaseEntity
-{
-	@Id
-	@GeneratedValue ( strategy = GenerationType.IDENTITY )
-	private Long id;
+public class Note extends BaseEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@Column ( name = "title" )
-	private String title;
+    @Column(name = "title")
+    private String title;
 
-	@Column ( name = "content" )
-	private String content;
+    @Column(name = "content")
+    private String content;
 
-	@ManyToOne
-	private User owner;
+    @ManyToOne
+    private User owner;
 
-	@ManyToMany
-	@JoinTable ( name = "user_notes", joinColumns = @JoinColumn ( name = "note_id" ), inverseJoinColumns = @JoinColumn ( name = "user_id" ) )
-	private List<User> sharedUsers = new ArrayList<>();
+    @ManyToMany
+    @JoinTable(name = "user_notes", joinColumns = @JoinColumn(name = "note_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private List<User> sharedUsers = new ArrayList<>();
 }

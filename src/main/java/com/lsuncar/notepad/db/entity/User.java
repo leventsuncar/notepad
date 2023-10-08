@@ -23,69 +23,63 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
-@Table ( name = "user_" )
+@Table(name = "user_")
 @Data
-public class User extends BaseEntity implements UserDetails
-{
-	@Id
-	@GeneratedValue( strategy = GenerationType.AUTO )
-	@Column ( name = "id" )
-	private Long id;
+public class User extends BaseEntity implements UserDetails {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    private Long id;
 
-	@Column ( name = "uname", unique = true )
-	@NotNull
-	@NotBlank
-	@NotEmpty
-	private String username;
+    @Column(name = "uname", unique = true)
+    @NotNull
+    @NotBlank
+    @NotEmpty
+    private String username;
 
-	@Column ( name = "email", unique = true)
-	@Email
-	@NotNull
-	@NotBlank
-	@NotEmpty
-	private String email;
+    @Column(name = "email", unique = true)
+    @Email
+    @NotNull
+    @NotBlank
+    @NotEmpty
+    private String email;
 
-	@Column ( name = "password" )
-	@NotNull
-	@NotBlank
-	@NotEmpty
-	private String password;
+    @Column(name = "password")
+    @NotNull
+    @NotBlank
+    @NotEmpty
+    private String password;
 
-	@JsonIgnore
-	@OneToMany(fetch = FetchType.LAZY , mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Note> ownedNotes;
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Note> ownedNotes;
 
-	@JsonIgnore
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities ()
-	{
-		return null;
-	}
+    @JsonIgnore
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
 
-	@JsonIgnore
-	@Override
-	public boolean isAccountNonExpired ()
-	{
-		return true;
-	}
+    @JsonIgnore
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
 
-	@JsonIgnore
-	@Override
-	public boolean isAccountNonLocked ()
-	{
-		return true;
-	}
+    @JsonIgnore
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
 
-	@JsonIgnore
-	@Override
-	public boolean isCredentialsNonExpired ()
-	{
-		return true;
-	}
+    @JsonIgnore
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
 
-	@Override
-	public boolean isEnabled ()
-	{
-		return this.getActive();
-	}
+    @Override
+    public boolean isEnabled() {
+        return this.getActive();
+    }
 }

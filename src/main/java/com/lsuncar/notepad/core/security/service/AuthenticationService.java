@@ -31,11 +31,11 @@ public class AuthenticationService {
                         loginRequest.getUsername(), loginRequest.getPassword()
                 )
         );
-        User user = userRepository.findUserByUsername( loginRequest.getUsername() );
-        String token = jwtUtils.generateToken( new HashMap<>(), user );
+        User user = userRepository.findUserByUsername(loginRequest.getUsername());
+        String token = jwtUtils.generateToken(new HashMap<>(), user);
         LoginResponse loginResponse = new LoginResponse();
-        loginResponse.setToken( token );
-        loginResponse.setUserId( user.getId() );
+        loginResponse.setToken(token);
+        loginResponse.setUserId(user.getId());
         return loginResponse;
     }
 }

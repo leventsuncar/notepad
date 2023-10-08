@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO signup(UserDTO userDTO) throws Exception {
         try {
-            userDTO.setPassword( passwordEncoder.encode( userDTO.getPassword() ));
+            userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
             UserDTO savedUser = userDAO.save(userDTO);
             return savedUser;
         } catch (Exception e) {
@@ -47,9 +47,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO findUserByUsername(String username) {
         try {
-            return userDAO.findUserByUsername( username );
+            return userDAO.findUserByUsername(username);
         } catch (Exception e) {
-			throw e;
+            throw e;
         }
     }
 }
