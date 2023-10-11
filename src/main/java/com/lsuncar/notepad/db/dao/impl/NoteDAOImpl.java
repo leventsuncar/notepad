@@ -46,13 +46,13 @@ public class NoteDAOImpl implements NoteDAO {
     public List<NoteDTO> findDeletedNoteByUserId(Long userId) throws Exception {
 //		try
 //		{
-//			List<Note> noteList = noteRepository.findByUser_IdAndActiveIsFalseOrderByUpdatedAtDesc( userId );
-//			List<NoteDTO> noteDTOList = new ArrayList<>();
+//			List<NoteEntity> noteList = noteRepository.findByUser_IdAndActiveIsFalseOrderByUpdatedAtDesc( userId );
+//			List<NoteEntityDTO> noteDTOList = new ArrayList<>();
 //			if ( nonNull( noteList ) && !noteList.isEmpty() )
 //			{
-//				for ( Note note : noteList )
+//				for ( NoteEntity note : noteList )
 //				{
-//					NoteDTO noteDTO = getMapper().toNoteDTO( note );
+//					NoteEntityDTO noteDTO = getMapper().toNoteDTO( note );
 //					noteDTOList.add( noteDTO );
 //				}
 //			}
@@ -123,5 +123,24 @@ public class NoteDAOImpl implements NoteDAO {
         } catch (Exception e) {
             throw e;
         }
+    }
+
+    @Override
+    public List<NoteDTO> findAllNotesByUser(Long userId) throws Exception {
+            //TODO
+//        try {
+//            List<NoteEntity> notes = noteRepository.findNotesByOwner_IdOrSharedUsers_Id(userId);
+//            if (nonNull(notes) && !notes.isEmpty()) {
+//                List<NoteEntityDTO> noteDTOList = new ArrayList<>();
+//                for (NoteEntity note : notes) {
+//                    noteDTOList.add(getMapper().toNoteDTO(note));
+//                }
+//                return noteDTOList;
+//            }
+//            return null;
+//        } catch (Exception e) {
+//            throw e;
+//        }
+    return null;
     }
 }

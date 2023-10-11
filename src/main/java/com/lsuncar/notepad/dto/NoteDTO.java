@@ -1,15 +1,20 @@
 package com.lsuncar.notepad.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.lsuncar.notepad.db.entity.Note;
 import lombok.Data;
 
 import java.util.List;
 
+/**
+ * DTO for {@link Note}
+ */
 @Data
-public class NoteDTO {
+public class NoteDTO extends BaseDTO {
     private Long id;
     private String title;
     private String content;
-    private Boolean active;
     private UserDTO owner;
-    private List<UserDTO> sharedUsers;
+    @JsonIgnore
+    private List<UserSharedNotesDTO> userSharedNotes;
 }

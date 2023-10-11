@@ -16,4 +16,6 @@ public interface NoteDAO {
     NoteDTO save(NoteDTO note) throws Exception;
 
     NoteDTO findNoteById(Long noteId) throws Exception;
+
+    List<NoteDTO> findAllNotesByUser (Long userId ) throws Exception;
 }

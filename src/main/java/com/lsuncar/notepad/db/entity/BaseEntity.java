@@ -3,8 +3,10 @@ package com.lsuncar.notepad.db.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 
+import java.io.Serializable;
+
 @MappedSuperclass
-public abstract class BaseEntity {
+public abstract class BaseEntity implements Serializable {
 
     @Column(name = "created_at")
     private Long createdAt;
