@@ -1,58 +1,48 @@
 package com.lsuncar.notepad.db.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+@Data
 @Entity
 @Table(name = "user_")
-@Data
 public class User extends BaseEntity implements UserDetails {
-    @Id
+
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "uname", unique = true)
-    @NotNull
-    @NotBlank
-    @NotEmpty
+    @Column(name = "username", nullable = false)
     private String username;
 
-    @Column(name = "email", unique = true)
-    @Email
-    @NotNull
-    @NotBlank
-    @NotEmpty
+    @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "password")
-    @NotNull
-    @NotBlank
-    @NotEmpty
+    @Column(name = "password", nullable = false)
     private String password;
 
+    @Column(name = "firstname")
+    private String firstname;
+
+    @Column(name = "lastname")
+    private String lastname;
+
     @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Note> ownedNotes;
+    @OneToMany(mappedBy = "id")
+    private List<UserSharedNote> userSharedNoteById;
 
     @JsonIgnore
     @Override
@@ -78,8 +68,9 @@ public class User extends BaseEntity implements UserDetails {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isEnabled() {
-        return this.getActive();
+        return true;
     }
 }

@@ -1,7 +1,6 @@
 package com.lsuncar.notepad.service.impl;
 
 import com.lsuncar.notepad.controller.req.NoteRequest;
-import com.lsuncar.notepad.controller.req.ShareNoteRequest;
 import com.lsuncar.notepad.core.exception.EntityNotFoundException;
 import com.lsuncar.notepad.db.dao.NoteDAO;
 import com.lsuncar.notepad.db.dao.UserDAO;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -108,29 +106,46 @@ public class NoteServiceImpl implements NoteService {
         }
     }
 
-    @Override
-    public NoteDTO shareNote(ShareNoteRequest shareNoteRequest) throws Exception {
-        try {
-            NoteDTO noteDTO = noteDAO.findNoteById(shareNoteRequest.getNoteId());
-            if (Objects.nonNull(noteDTO)) //Note exist
-            {
-                List<UserDTO> addingUsers = new ArrayList<>();
-                if (Objects.nonNull(shareNoteRequest.getSharingUsers()) && !shareNoteRequest.getSharingUsers().isEmpty()) {
-                    for (Long userId : shareNoteRequest.getSharingUsers()) {
-                        try {
-                            UserDTO userDTO = userDAO.findUserById(userId);
-                            if (nonNull(userDTO)) {
-                                addingUsers.add(userDTO);
-                            }
-                        } catch (Exception e) {
-                            logger.warn("Selected User Not Found:" + userId);
-                        }
-                    }
-                } else throw new Exception("User Ids cannot be EMPTY");
+//    @Override  TODO
+//    public NoteEntityDTO shareNote(ShareNoteRequest shareNoteRequest) throws Exception {
+//        try {
+//            NoteEntityDTO noteDTO = noteDAO.findNoteById(shareNoteRequest.getNoteId());
+//            if (Objects.nonNull(noteDTO)) //Note exist
+//            {
+//                List<UserEntityDTO> addingUsers = new ArrayList<>();
+//                if (Objects.nonNull(shareNoteRequest.getSharingUsers()) && !shareNoteRequest.getSharingUsers().isEmpty()) {
+//                    for (Long userId : shareNoteRequest.getSharingUsers()) {
+//                        try {
+//                            UserEntityDTO userDTO = userDAO.findUserById(userId);
+//                            if (nonNull(userDTO)) {
+//                                addingUsers.add(userDTO);
+//                            }
+//                        } catch (Exception e) {
+//                            logger.warn("Selected User Not Found:" + userId);
+//                        }
+//                    }
+//                } else throw new Exception("User Ids cannot be EMPTY");
+//
+//                noteDTO.getSharedUsers().addAll(addingUsers);
+//                return noteDAO.save(noteDTO);
+//            } else throw new EntityNotFoundException("Selected Note Not Found!");
+//        } catch (Exception e) {
+//            throw e;
+//        }
+//    }
 
-                noteDTO.getSharedUsers().addAll(addingUsers);
-                return noteDAO.save(noteDTO);
-            } else throw new EntityNotFoundException("Selected Note Not Found!");
+    @Override
+    public List<NoteDTO> getAllUserNotes(Long userId) throws Exception {
+        try {
+            List<NoteDTO> noteDTOList = noteDAO.findAllNotesByUser(userId);
+            List<NoteDTO> responseNotes = new ArrayList<>();
+            if (nonNull(noteDTOList) && !noteDTOList.isEmpty()) {
+                for (NoteDTO noteDTO : noteDTOList) {
+
+                }
+                return responseNotes;
+            }
+            return null;
         } catch (Exception e) {
             throw e;
         }
