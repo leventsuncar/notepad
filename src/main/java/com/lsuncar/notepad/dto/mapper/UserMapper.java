@@ -1,7 +1,7 @@
 package com.lsuncar.notepad.dto.mapper;
 
-import com.lsuncar.notepad.dto.UserDTO;
 import com.lsuncar.notepad.db.entity.User;
+import com.lsuncar.notepad.dto.UserDTO;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;

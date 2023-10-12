@@ -5,7 +5,7 @@ import com.lsuncar.notepad.dto.UserSharedNotesDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(componentModel = "lombok", uses = {UserMapper.class})
+@Mapper(componentModel = "lombok", uses = {UserMapper.class, NoteMapper.class})
 public interface UserSharedNotesMapper {
 
     UserSharedNotesMapper INSTANCE = Mappers.getMapper(UserSharedNotesMapper.class);

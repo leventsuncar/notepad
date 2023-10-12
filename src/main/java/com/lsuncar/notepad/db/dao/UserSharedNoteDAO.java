@@ -12,8 +12,6 @@ public interface UserSharedNoteDAO {
 
     UserSharedNotesDTO add(UserSharedNotesDTO userSharedNotes) throws Exception;
 
-    void deleteUserSharedNote(UserSharedNotesDTO userSharedNotesDTO) throws Exception;
-
     void deletePermanentlyUserSharedNote(UserSharedNotesDTO userSharedNotes) throws Exception;
 
 }
