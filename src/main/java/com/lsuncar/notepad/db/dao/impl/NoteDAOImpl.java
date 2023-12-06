@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -101,8 +102,7 @@ public class NoteDAOImpl implements NoteDAO {
         try {
             Note note = getMapper().toNote(noteDTO);
             note.setActive(true);
-            note.setUpdatedAt(System.currentTimeMillis());
-            note.setCreatedAt(System.currentTimeMillis());
+            note.setCreatedAt(new Date().getTime());
             Note savedNote = noteRepository.save(note);
             NoteDTO savedNoteDTO = getMapper().toNoteDTO(savedNote);
             return savedNoteDTO;

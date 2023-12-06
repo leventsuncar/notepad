@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -82,6 +83,7 @@ public class UserSharedNoteDAOImpl implements UserSharedNoteDAO {
 
         try {
             UserSharedNote userSharedNote = getMapper().toEntity(userSharedNoteDTO);
+            userSharedNote.setCreatedAt( new Date().getTime() );
             UserSharedNote savedUserSharedNote = userSharedNoteRepository.save(userSharedNote);
             UserSharedNotesDTO savedUserSharedNotesDTO = getMapper().toDto(savedUserSharedNote);
             return savedUserSharedNotesDTO;

@@ -8,6 +8,8 @@ import com.lsuncar.notepad.dto.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
+
 import static java.util.Objects.nonNull;
 
 @Component
@@ -37,8 +39,7 @@ public class UserDAOImpl implements UserDAO {
         try {
             User user = getMapper().toUser(userDTO);
             user.setActive(true);
-            user.setCreatedAt(System.currentTimeMillis());
-            user.setUpdatedAt(System.currentTimeMillis());
+            user.setCreatedAt(new Date().getTime());
             User savedUser = userRepository.save(user);
             return getMapper().toUserDTO(savedUser);
         } catch (Exception e) {

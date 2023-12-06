@@ -12,7 +12,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "user_shared_notes", schema = "public")
+@Table(name = "user_shared_notes")
 public class UserSharedNote extends BaseEntity {
 
     @GeneratedValue(strategy = GenerationType.AUTO)

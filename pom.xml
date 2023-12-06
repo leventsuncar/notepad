@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.lsuncar</groupId>
 	<artifactId>notepad</artifactId>
-	<version>0.0.3-SNAPSHOT</version>
+	<version>0.0.4-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>notepad</name>
 	<description>notepad</description>

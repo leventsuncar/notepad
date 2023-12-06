@@ -52,16 +52,6 @@ public class NoteController {
         }
     }
 
-    @PostMapping("share")
-    public ResponseEntity<?> shareNote(@RequestBody ShareNoteRequest shareNoteRequest) {
-//        try {
-//            NoteEntityDTO noteDTO = noteService.shareNote(shareNoteRequest);
-//            return ResponseEntity.ok(noteDTO);
-//        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("IN PROGRESS");
-//        }
-    }
-
     @GetMapping("get/all/{userId}")
     public ResponseEntity<?> getAllByUser(@PathVariable Long userId) {
 
@@ -71,6 +61,5 @@ public class NoteController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-
     }
 }

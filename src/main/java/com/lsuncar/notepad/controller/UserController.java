@@ -23,8 +23,8 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping(path = "sign-up")
-    public ResponseEntity<?> signIn(@RequestBody UserDTO user) {
+    @PostMapping("sign-up")
+    public ResponseEntity<?> signUp(@RequestBody UserDTO user) {
         try {
             UserDTO savedUser = userService.signup(user);
             return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
@@ -34,7 +34,7 @@ public class UserController {
         }
     }
 
-    @GetMapping(path = "{id}")
+    @GetMapping("{id}")
     public ResponseEntity<?> getUserById(@PathVariable Long id) {
         try {
             UserDTO user = userService.findUserById(id);
