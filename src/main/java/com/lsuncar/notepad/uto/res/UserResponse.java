@@ -1,4 +1,4 @@
-package com.lsuncar.notepad.controller.res;
+package com.lsuncar.notepad.uto.res;
 
 import lombok.Data;
 

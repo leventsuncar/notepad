@@ -32,8 +32,4 @@ public class Note extends BaseEntity {
     @OneToOne
     @JoinColumn(name = "owner", referencedColumnName = "id", nullable = false)
     private User owner;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "id")
-    private List<UserSharedNote> userSharedNotes;
 }

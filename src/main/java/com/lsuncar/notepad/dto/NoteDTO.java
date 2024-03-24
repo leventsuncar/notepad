@@ -15,6 +15,4 @@ public class NoteDTO extends BaseDTO {
     private String title;
     private String content;
     private UserDTO owner;
-    @JsonIgnore
-    private List<UserSharedNotesDTO> userSharedNotes;
 }

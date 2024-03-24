@@ -11,7 +11,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Entity
-@Table(name = "company")
+@Table(name = "company", schema = "public")
 @Data
 public class Company extends BaseEntity {
 
@@ -26,7 +26,7 @@ public class Company extends BaseEntity {
     private String name;
 
     /* www.hostName.com -> maybe the user email may be associated with the company host name. */
-    @Column( name = "hostname")
+    @Column( name = "hostname", unique = true)
     @NotNull( message = "fieldCannotBeNull-hostName")
     @NotBlank( message =  "fieldCannotBeBlank-hostName")
     private String hostName;

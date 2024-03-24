@@ -4,6 +4,7 @@ import com.lsuncar.notepad.core.exception.EntityNotFoundException;
 import com.lsuncar.notepad.db.dao.UserDAO;
 import com.lsuncar.notepad.dto.UserDTO;
 import com.lsuncar.notepad.service.UserService;
+import com.lsuncar.notepad.uto.req.UserRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,9 +22,19 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public UserDTO signup(UserDTO userDTO) throws Exception {
+    public UserDTO signup(UserRequest userRequest) throws Exception {
         try {
-            userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+
+            //email and userName must be unique
+
+
+            UserDTO userDTO = new UserDTO();
+            userDTO.setFirstname(userRequest.getFirstname());
+            userDTO.setLastname(userRequest.getLastname());
+            userDTO.setUsername(userRequest.getUsername());
+            userDTO.setEmail(userRequest.getEmail());
+            userDTO.setCreatedAt(System.currentTimeMillis());
+            userDTO.setPassword(passwordEncoder.encode(userRequest.getPassword()));
             UserDTO savedUser = userDAO.save(userDTO);
             return savedUser;
         } catch (Exception e) {

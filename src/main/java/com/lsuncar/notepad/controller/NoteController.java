@@ -1,12 +1,13 @@
 package com.lsuncar.notepad.controller;
 
-import com.lsuncar.notepad.controller.req.NoteRequest;
-import com.lsuncar.notepad.controller.req.ShareNoteRequest;
+import com.lsuncar.notepad.uto.req.NoteRequest;
+import com.lsuncar.notepad.core.results.SuccessResult;
 import com.lsuncar.notepad.dto.NoteDTO;
 import com.lsuncar.notepad.service.NoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping("note/")
 public class NoteController {
+
     @Autowired
     private NoteService noteService;
 
@@ -62,4 +64,15 @@ public class NoteController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @DeleteMapping("delete/{noteId}")
+    public ResponseEntity<?> deleteNoteById(Long noteId) {
+        try {
+            noteService.deleteNoteById(noteId);
+            return ResponseEntity.ok(new SuccessResult("Deleted"));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 }

@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,7 +18,7 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "user_")
+@Table(name = "user_", schema = "public") //Belki yeni şema eklerim
 public class User extends BaseEntity implements UserDetails {
 
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,10 +26,10 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "username", nullable = false)
+    @Column(name = "username", nullable = false, unique = true)
     private String username;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @Column(name = "password", nullable = false)
@@ -39,10 +40,6 @@ public class User extends BaseEntity implements UserDetails {
 
     @Column(name = "lastname")
     private String lastname;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "id")
-    private List<UserSharedNote> userSharedNoteById;
 
     @JsonIgnore
     @Override
