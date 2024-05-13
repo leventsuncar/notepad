@@ -22,10 +22,13 @@ public class WebSecurityConfig {
     @Autowired
     private final AuthenticationProvider authenticationProvider;
 
+//    @Autowired
+//    private final CORSFilter corsFilter;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.csrf()
-                .disable()
+        httpSecurity.csrf().disable()
+                .cors().and()
                 .authorizeHttpRequests()
                 .requestMatchers("/auth/login", "/user/sign-up")
                 .permitAll()
@@ -35,7 +38,7 @@ public class WebSecurityConfig {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .authenticationProvider(authenticationProvider)
+//                .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }

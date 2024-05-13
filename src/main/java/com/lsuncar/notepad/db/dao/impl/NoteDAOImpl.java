@@ -29,7 +29,7 @@ public class NoteDAOImpl implements NoteDAO {
     @Override
     public List<NoteDTO> findNoteByUserId(Long userId) throws Exception {
         try {
-            List<Note> noteList = noteRepository.findNotesByOwner_Id(userId);
+            List<Note> noteList = noteRepository.findNotesByOwner_IdAndActiveTrue(userId);
             return getNoteDTOS(noteList);
         } catch (Exception e) {
             throw e;
@@ -55,8 +55,7 @@ public class NoteDAOImpl implements NoteDAO {
                 Note note = noteOptional.get();
                 note.setActive(false);
                 note.setUpdatedAt(System.currentTimeMillis());
-                NoteDTO noteDTO = getMapper().toNoteDTO(note);
-                save(noteDTO);
+                noteRepository.save(note);
                 return true;
             } else
                 return false;

@@ -1,10 +1,7 @@
 package com.lsuncar.notepad.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lsuncar.notepad.db.entity.Note;
 import lombok.Data;
-
-import java.util.List;
 
 /**
  * DTO for {@link Note}

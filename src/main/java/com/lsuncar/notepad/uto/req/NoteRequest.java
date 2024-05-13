@@ -11,4 +11,5 @@ public class NoteRequest {
     private Long userId;  //Creator user
     private List<CompanyPermission> companyPermissions;
     private List<UserPermission> userPermissions;
+    private Long id;
 }

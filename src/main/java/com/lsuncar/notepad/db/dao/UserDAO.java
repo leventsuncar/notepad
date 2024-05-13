@@ -8,4 +8,6 @@ public interface UserDAO {
     UserDTO save(UserDTO user) throws Exception;
 
     UserDTO findUserByUsername(String username);
+
+    UserDTO findUserByEmail(String email);
 }

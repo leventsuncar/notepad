@@ -5,6 +5,6 @@ import lombok.Data;
 
 @Data
 public class UserPermission {
-    private Long userId;
+    private String emailAddress;
     private AccessLevel accessLevel;
 }

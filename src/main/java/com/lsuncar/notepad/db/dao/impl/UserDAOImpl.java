@@ -26,8 +26,7 @@ public class UserDAOImpl implements UserDAO {
     public UserDTO findUserById(Long userId) {
         try {
             User user = userRepository.findByIdAndActiveIsTrue(userId);
-            if (nonNull(user))
-                return getMapper().toUserDTO(user);
+            if (nonNull(user)) return getMapper().toUserDTO(user);
             else return null;
         } catch (Exception e) {
             throw e;
@@ -51,6 +50,17 @@ public class UserDAOImpl implements UserDAO {
     public UserDTO findUserByUsername(String username) {
         try {
             User user = userRepository.findUserByUsername(username);
+            UserDTO userDTO = getMapper().toUserDTO(user);
+            return userDTO;
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    @Override
+    public UserDTO findUserByEmail(String email) {
+        try {
+            User user = userRepository.findUserByEmailAndActiveIsTrue(email);
             UserDTO userDTO = getMapper().toUserDTO(user);
             return userDTO;
         } catch (Exception e) {
