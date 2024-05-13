@@ -1,4 +1,4 @@
-package com.lsuncar.notepad.controller.req;
+package com.lsuncar.notepad.uto.req;
 
 import lombok.Data;
 
@@ -7,6 +7,6 @@ import java.util.List;
 @Data
 public class ShareNoteRequest
 {
-	private List<Long> sharingUsers;
+	private List<PermissionRequest> permissionRequests;
 	private Long noteId;
 }

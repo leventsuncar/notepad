@@ -18,26 +18,16 @@ public abstract class RouteBuilderConfigurer extends RouteBuilder {
      */
     @PostConstruct
     private void doInit() {
-        /*
-         autoDelete deadLetterExchange deadLetterQueue declare durable hostname portNumber
-         autoAck vhost prefetchCount concurrentConsumers password username
-         */
+        System.out.println( getRoutingKey() );
         urlParamSerializer = new UrlParamSerializer();
-        urlParamSerializer.addParameter("routingKey", getRoutingKey());
         urlParamSerializer.addParameter("exchangeType", "topic");
-
-
-        urlParamSerializer.addParameter("autoDelete", false);
-        urlParamSerializer.addParameter("deadLetterExchange", getExchangeName() + "-dead");
+        urlParamSerializer.addParameter("routingKey", getRoutingKey());
+        urlParamSerializer.addParameter("deadLetterRoutingKey", getRoutingKey() + "-dead");
+        urlParamSerializer.addParameter("deadLetterExchange", getExchangeName());
+        urlParamSerializer.addParameter("deadLetterExchangeType", "topic");
         urlParamSerializer.addParameter("deadLetterQueue", getRoutingKey() + "-dead");
         urlParamSerializer.addParameter("autoDeclare", true);
-        urlParamSerializer.addParameter("durable", false);
-        urlParamSerializer.addParameter("hostname", "localhost"); //do parametric
-        urlParamSerializer.addParameter("portNumber", "5672");
-        urlParamSerializer.addParameter("autoAck", true);
-        urlParamSerializer.addParameter("prefetchCount", 5); //do parametric
-        urlParamSerializer.addParameter("password", "admin"); //do parametric
-        urlParamSerializer.addParameter("username", "admin"); //do parametric
+        urlParamSerializer.addParameter("prefetchCount", 5);
         urlParamSerializer.addParameter("concurrentConsumers", 1); //do parametric
 
         setUrlParamSerializer( urlParamSerializer );

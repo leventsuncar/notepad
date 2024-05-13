@@ -8,6 +8,8 @@ import com.lsuncar.notepad.dto.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
+
 import static java.util.Objects.nonNull;
 
 @Component
@@ -24,8 +26,7 @@ public class UserDAOImpl implements UserDAO {
     public UserDTO findUserById(Long userId) {
         try {
             User user = userRepository.findByIdAndActiveIsTrue(userId);
-            if (nonNull(user))
-                return getMapper().toUserDTO(user);
+            if (nonNull(user)) return getMapper().toUserDTO(user);
             else return null;
         } catch (Exception e) {
             throw e;
@@ -37,8 +38,7 @@ public class UserDAOImpl implements UserDAO {
         try {
             User user = getMapper().toUser(userDTO);
             user.setActive(true);
-            user.setCreatedAt(System.currentTimeMillis());
-            user.setUpdatedAt(System.currentTimeMillis());
+            user.setCreatedAt(new Date().getTime());
             User savedUser = userRepository.save(user);
             return getMapper().toUserDTO(savedUser);
         } catch (Exception e) {
@@ -50,6 +50,17 @@ public class UserDAOImpl implements UserDAO {
     public UserDTO findUserByUsername(String username) {
         try {
             User user = userRepository.findUserByUsername(username);
+            UserDTO userDTO = getMapper().toUserDTO(user);
+            return userDTO;
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    @Override
+    public UserDTO findUserByEmail(String email) {
+        try {
+            User user = userRepository.findUserByEmailAndActiveIsTrue(email);
             UserDTO userDTO = getMapper().toUserDTO(user);
             return userDTO;
         } catch (Exception e) {

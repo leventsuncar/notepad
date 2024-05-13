@@ -1,10 +1,19 @@
 package com.lsuncar.notepad.service.impl;
 
-import com.lsuncar.notepad.controller.req.NoteRequest;
+import com.lsuncar.notepad.core.messaging.email.SMTPUtil;
+import com.lsuncar.notepad.uto.req.NoteRequest;
+import com.lsuncar.notepad.uto.req.ShareNoteRequest;
+import com.lsuncar.notepad.uto.req.PermissionRequest;
 import com.lsuncar.notepad.core.exception.EntityNotFoundException;
+import com.lsuncar.notepad.db.dao.CompanyDAO;
+import com.lsuncar.notepad.db.dao.CompanyUserDAO;
 import com.lsuncar.notepad.db.dao.NoteDAO;
+import com.lsuncar.notepad.db.dao.PermissionDAO;
 import com.lsuncar.notepad.db.dao.UserDAO;
+import com.lsuncar.notepad.dto.CompanyDTO;
+import com.lsuncar.notepad.dto.CompanyUserDTO;
 import com.lsuncar.notepad.dto.NoteDTO;
+import com.lsuncar.notepad.dto.PermissionDTO;
 import com.lsuncar.notepad.dto.UserDTO;
 import com.lsuncar.notepad.dto.mapper.NoteMapper;
 import com.lsuncar.notepad.service.NoteService;
@@ -27,6 +36,18 @@ public class NoteServiceImpl implements NoteService {
     @Autowired
     private UserDAO userDAO;
 
+    @Autowired
+    private CompanyUserDAO companyUserDAO;
+
+    @Autowired
+    private PermissionDAO permissionDAO;
+
+    @Autowired
+    private CompanyDAO companyDAO;
+
+    @Autowired
+    private SMTPUtil smtpUtil;
+
     private NoteMapper getMapper() {
         return NoteMapper.INSTANCE;
     }
@@ -42,6 +63,7 @@ public class NoteServiceImpl implements NoteService {
             else
                 throw new EntityNotFoundException("Notes not found");
         } catch (Exception e) {
+            logger.error(e.getMessage(), e);
             throw e;
         }
     }
@@ -55,6 +77,7 @@ public class NoteServiceImpl implements NoteService {
             else
                 throw new EntityNotFoundException("Notes not found");
         } catch (Exception e) {
+            logger.error(e.getMessage(), e);
             throw e;
         }
     }
@@ -69,6 +92,7 @@ public class NoteServiceImpl implements NoteService {
             } else
                 throw new EntityNotFoundException("Note not found");
         } catch (Exception e) {
+            logger.error(e.getMessage(), e);
             throw e;
         }
 
@@ -84,6 +108,7 @@ public class NoteServiceImpl implements NoteService {
             } else
                 throw new EntityNotFoundException("Note not found");
         } catch (Exception e) {
+            logger.error(e.getMessage(), e);
             throw e;
         }
     }
@@ -99,54 +124,84 @@ public class NoteServiceImpl implements NoteService {
             noteDTO.setContent(note.getContent());
             noteDTO.setTitle(note.getTitle());
             noteDTO.setOwner(user);
+            if (note.getId() != null)
+                noteDTO.setId(note.getId());
+
             NoteDTO savedNote = noteDAO.save(noteDTO);
             return savedNote;
         } catch (Exception e) {
+            logger.error(e.getMessage(), e);
             throw e;
         }
     }
 
-//    @Override  TODO
-//    public NoteEntityDTO shareNote(ShareNoteRequest shareNoteRequest) throws Exception {
-//        try {
-//            NoteEntityDTO noteDTO = noteDAO.findNoteById(shareNoteRequest.getNoteId());
-//            if (Objects.nonNull(noteDTO)) //Note exist
-//            {
-//                List<UserEntityDTO> addingUsers = new ArrayList<>();
-//                if (Objects.nonNull(shareNoteRequest.getSharingUsers()) && !shareNoteRequest.getSharingUsers().isEmpty()) {
-//                    for (Long userId : shareNoteRequest.getSharingUsers()) {
-//                        try {
-//                            UserEntityDTO userDTO = userDAO.findUserById(userId);
-//                            if (nonNull(userDTO)) {
-//                                addingUsers.add(userDTO);
-//                            }
-//                        } catch (Exception e) {
-//                            logger.warn("Selected User Not Found:" + userId);
-//                        }
-//                    }
-//                } else throw new Exception("User Ids cannot be EMPTY");
-//
-//                noteDTO.getSharedUsers().addAll(addingUsers);
-//                return noteDAO.save(noteDTO);
-//            } else throw new EntityNotFoundException("Selected Note Not Found!");
-//        } catch (Exception e) {
-//            throw e;
-//        }
-//    }
+    @Override
+    public NoteDTO shareNote(ShareNoteRequest shareNoteRequest) throws Exception {
+        try {
+            NoteDTO noteDTO = noteDAO.findNoteById(shareNoteRequest.getNoteId());
+            if (nonNull(noteDTO)) //Note exist
+            {
+                List<PermissionRequest> permissionRequests = shareNoteRequest.getPermissionRequests();
+
+                for (PermissionRequest permissionRequest : permissionRequests) {
+                    boolean userPermission = false;
+
+                    PermissionDTO permissionDTO = new PermissionDTO();
+                    permissionDTO.setNote(noteDTO);
+                    permissionDTO.setActive(true);
+                    permissionDTO.setCreatedAt(System.currentTimeMillis());
+
+                    if (nonNull(permissionRequest.getCompanyPermissions())) {
+                        CompanyDTO companyDTO = companyDAO.findCompanyById(permissionRequest.getCompanyPermissions().getCompanyId());
+                        if (nonNull(companyDTO)) {
+                            permissionDTO.setCompany(companyDTO);
+                            permissionDTO.setAccessLevel(permissionRequest.getCompanyPermissions().getAccessLevel());
+                        } else
+                            throw new EntityNotFoundException("Company Not Found");
+                    }
+
+                    if (nonNull(permissionRequest.getUserPermissions())) {
+                        userPermission = true;
+                        UserDTO userDTO = userDAO.findUserByEmail(permissionRequest.getUserPermissions().getEmailAddress());
+                        if (nonNull(userDTO)) {
+                            permissionDTO.setUser(userDTO);
+                            permissionDTO.setAccessLevel(permissionRequest.getUserPermissions().getAccessLevel());
+                        } else
+                            throw new EntityNotFoundException("User Not Found");
+                    }
+                    permissionDAO.updatePermission(permissionDTO);
+                    if (userPermission)
+                        smtpUtil.sendMail(permissionDTO.getUser().getEmail(), "Note Shared", "Note Shared with u");
+                }
+
+
+                return noteDTO;
+            } else throw new EntityNotFoundException("Selected Note Not Found!");
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            throw e;
+        }
+    }
 
     @Override
     public List<NoteDTO> getAllUserNotes(Long userId) throws Exception {
         try {
-            List<NoteDTO> noteDTOList = noteDAO.findAllNotesByUser(userId);
-            List<NoteDTO> responseNotes = new ArrayList<>();
-            if (nonNull(noteDTOList) && !noteDTOList.isEmpty()) {
-                for (NoteDTO noteDTO : noteDTOList) {
+            CompanyUserDTO companyUserDTO = companyUserDAO.findByUserId(userId);
+            Long companyId = null;
+            if (nonNull(companyUserDTO))
+                companyId = companyUserDTO.getCompany().getId();
 
-                }
-                return responseNotes;
-            }
-            return null;
+            List<NoteDTO> noteDTOList = noteDAO.findAllNotesByUser(userId, companyId);
+//            List<NoteDTO> responseNotes = new ArrayList<>();
+//            if (nonNull(noteDTOList) && !noteDTOList.isEmpty()) {
+//                for (NoteDTO noteDTO : noteDTOList) {
+//
+//                }
+//                return responseNotes;
+//            }
+            return noteDTOList;
         } catch (Exception e) {
+            logger.error(e.getMessage(), e);
             throw e;
         }
     }

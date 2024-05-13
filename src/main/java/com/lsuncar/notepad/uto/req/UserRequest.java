@@ -1,17 +1,14 @@
-package com.lsuncar.notepad.dto;
+package com.lsuncar.notepad.uto.req;
 
-import com.lsuncar.notepad.db.entity.User;
 import lombok.Data;
 
-/**
- * DTO for {@link User}
- */
 @Data
-public class UserDTO extends BaseDTO {
-    private Long id;
+public class UserRequest {
     private String username;
     private String email;
+    private String emailHost;
     private String password;
+    private String repeatPassword;
     private String firstname;
     private String lastname;
 }

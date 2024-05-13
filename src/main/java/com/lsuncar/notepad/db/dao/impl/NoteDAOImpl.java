@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,15 +29,8 @@ public class NoteDAOImpl implements NoteDAO {
     @Override
     public List<NoteDTO> findNoteByUserId(Long userId) throws Exception {
         try {
-            List<Note> noteList = noteRepository.findNotesByOwner_Id(userId);
-            List<NoteDTO> noteDTOList = new ArrayList<>();
-            if (nonNull(noteList) && !noteList.isEmpty()) {
-                for (Note note : noteList) {
-                    NoteDTO noteDTO = getMapper().toNoteDTO(note);
-                    noteDTOList.add(noteDTO);
-                }
-            }
-            return noteDTOList;
+            List<Note> noteList = noteRepository.findNotesByOwner_IdAndActiveTrue(userId);
+            return getNoteDTOS(noteList);
         } catch (Exception e) {
             throw e;
         }
@@ -44,25 +38,13 @@ public class NoteDAOImpl implements NoteDAO {
 
     @Override
     public List<NoteDTO> findDeletedNoteByUserId(Long userId) throws Exception {
-//		try
-//		{
-//			List<NoteEntity> noteList = noteRepository.findByUser_IdAndActiveIsFalseOrderByUpdatedAtDesc( userId );
-//			List<NoteEntityDTO> noteDTOList = new ArrayList<>();
-//			if ( nonNull( noteList ) && !noteList.isEmpty() )
-//			{
-//				for ( NoteEntity note : noteList )
-//				{
-//					NoteEntityDTO noteDTO = getMapper().toNoteDTO( note );
-//					noteDTOList.add( noteDTO );
-//				}
-//			}
-//			return noteDTOList;
-//		}
-//		catch ( Exception e )
-//		{
-//			throw e;
-//		}
-        return null;
+        try {
+            //TODO List<Note> noteList = noteRepository.findByUser_IdAndActiveIsFalseOrderByUpdatedAtDesc( userId );
+            List<Note> noteList = new ArrayList<>();
+            return getNoteDTOS(noteList);
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     @Override
@@ -73,8 +55,7 @@ public class NoteDAOImpl implements NoteDAO {
                 Note note = noteOptional.get();
                 note.setActive(false);
                 note.setUpdatedAt(System.currentTimeMillis());
-                NoteDTO noteDTO = getMapper().toNoteDTO(note);
-                save(noteDTO);
+                noteRepository.save(note);
                 return true;
             } else
                 return false;
@@ -101,8 +82,7 @@ public class NoteDAOImpl implements NoteDAO {
         try {
             Note note = getMapper().toNote(noteDTO);
             note.setActive(true);
-            note.setUpdatedAt(System.currentTimeMillis());
-            note.setCreatedAt(System.currentTimeMillis());
+            note.setCreatedAt(new Date().getTime());
             Note savedNote = noteRepository.save(note);
             NoteDTO savedNoteDTO = getMapper().toNoteDTO(savedNote);
             return savedNoteDTO;
@@ -126,21 +106,24 @@ public class NoteDAOImpl implements NoteDAO {
     }
 
     @Override
-    public List<NoteDTO> findAllNotesByUser(Long userId) throws Exception {
-            //TODO
-//        try {
-//            List<NoteEntity> notes = noteRepository.findNotesByOwner_IdOrSharedUsers_Id(userId);
-//            if (nonNull(notes) && !notes.isEmpty()) {
-//                List<NoteEntityDTO> noteDTOList = new ArrayList<>();
-//                for (NoteEntity note : notes) {
-//                    noteDTOList.add(getMapper().toNoteDTO(note));
-//                }
-//                return noteDTOList;
-//            }
-//            return null;
-//        } catch (Exception e) {
-//            throw e;
-//        }
-    return null;
+    public List<NoteDTO> findAllNotesByUser(Long userId, Long companyId) throws Exception {
+
+        try {
+            List<Note> notes = noteRepository.findAllNotesByUserId(userId, companyId);
+            return getNoteDTOS(notes);
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    private List<NoteDTO> getNoteDTOS(List<Note> noteList) {
+        List<NoteDTO> noteDTOList = new ArrayList<>();
+        if (nonNull(noteList) && !noteList.isEmpty()) {
+            for (Note note : noteList) {
+                NoteDTO noteDTO = getMapper().toNoteDTO(note);
+                noteDTOList.add(noteDTO);
+            }
+        }
+        return noteDTOList;
     }
 }

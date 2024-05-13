@@ -1,7 +1,7 @@
 package com.lsuncar.notepad.dto.mapper;
 
-import com.lsuncar.notepad.db.entity.Note;
-import com.lsuncar.notepad.dto.NoteDTO;
+import com.lsuncar.notepad.db.entity.Company;
+import com.lsuncar.notepad.dto.CompanyDTO;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
@@ -9,13 +9,14 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "lombok")
-public interface NoteMapper {
-    NoteMapper INSTANCE = Mappers.getMapper(NoteMapper.class);
+public interface CompanyMapper {
 
-    NoteDTO toNoteDTO(Note note);
+    CompanyMapper INSTANCE = Mappers.getMapper(CompanyMapper.class);
 
-    Note toNote(NoteDTO noteDTO);
+    Company toCompany(CompanyDTO companyDTO);
+
+    CompanyDTO toCompanyDTO(Company company);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    Note partialUpdate(NoteDTO noteDTO, @MappingTarget Note note);
+    Company partialUpdate(CompanyDTO companyDTO, @MappingTarget Company company);
 }
