@@ -1,6 +1,8 @@
 package com.lsuncar.notepad.service.impl;
 
+import com.lsuncar.notepad.Constants;
 import com.lsuncar.notepad.core.messaging.email.SMTPUtil;
+import com.lsuncar.notepad.core.util.ResourceBundleUtil;
 import com.lsuncar.notepad.uto.req.NoteRequest;
 import com.lsuncar.notepad.uto.req.ShareNoteRequest;
 import com.lsuncar.notepad.uto.req.PermissionRequest;
@@ -17,12 +19,11 @@ import com.lsuncar.notepad.dto.PermissionDTO;
 import com.lsuncar.notepad.dto.UserDTO;
 import com.lsuncar.notepad.dto.mapper.NoteMapper;
 import com.lsuncar.notepad.service.NoteService;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Objects.isNull;
@@ -138,6 +139,7 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public NoteDTO shareNote(ShareNoteRequest shareNoteRequest) throws Exception {
         try {
+            logger.debug( "Note req start" );
             NoteDTO noteDTO = noteDAO.findNoteById(shareNoteRequest.getNoteId());
             if (nonNull(noteDTO)) //Note exist
             {
@@ -171,10 +173,15 @@ public class NoteServiceImpl implements NoteService {
                     }
                     permissionDAO.updatePermission(permissionDTO);
                     if (userPermission)
-                        smtpUtil.sendMail(permissionDTO.getUser().getEmail(), "Note Shared", "Note Shared with u");
+                    {
+                        smtpUtil.sendMail(
+                                permissionDTO.getUser().getEmail(),
+                                ResourceBundleUtil.getLocaleText("shareMailSubject", "tr_TR"),
+                                ResourceBundleUtil.getLocaleText("noteShareEmail", "tr_TR", permissionDTO.getUser().getFirstname() + " " + permissionDTO.getUser().getLastname() , "", ""));
+                    }
                 }
-
-
+                //TODO debug
+                logger.info( "Node shared" );
                 return noteDTO;
             } else throw new EntityNotFoundException("Selected Note Not Found!");
         } catch (Exception e) {

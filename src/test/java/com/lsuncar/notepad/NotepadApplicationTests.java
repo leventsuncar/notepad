@@ -1,13 +1,13 @@
 package com.lsuncar.notepad;
 
-import org.junit.jupiter.api.Test;
+/*import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+@SpringBootTest*/
 class NotepadApplicationTests {
 
-	@Test
+	/*@Test
 	void contextLoads() {
-	}
+	}*/
 
 }

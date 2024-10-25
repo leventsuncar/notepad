@@ -4,6 +4,7 @@ import com.lsuncar.notepad.core.results.ErrorResult;
 import com.lsuncar.notepad.core.results.SuccessDataResult;
 import com.lsuncar.notepad.dto.UserDTO;
 import com.lsuncar.notepad.service.UserService;
+import com.lsuncar.notepad.uto.req.SendEmailForPasswordReset;
 import com.lsuncar.notepad.uto.req.UserRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,6 +47,16 @@ public class UserController {
             return ResponseEntity.ok(new SuccessDataResult<UserDTO>(user));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(new ErrorResult(e.getMessage()));
+        }
+    }
+
+    @PostMapping( "/forgotPassword" )
+    public ResponseEntity<?> sendResetPasswordMail(@RequestBody SendEmailForPasswordReset sendEmailForPasswordReset) {
+        try {
+            return ResponseEntity.ok( userService.sendEmailForPasswordReset(sendEmailForPasswordReset.getEmail() ) );
+        }
+        catch ( Exception e ) {
+            return ResponseEntity.badRequest().body(new ErrorResult("errorSendEmail"));
         }
     }
 }

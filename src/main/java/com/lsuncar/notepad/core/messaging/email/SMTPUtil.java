@@ -7,6 +7,7 @@ import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import java.util.Properties;
@@ -60,11 +61,11 @@ public class SMTPUtil {
         try {
             if (isNull(mailSender)) configure();
             MimeMessage mimeMessage = mailSender.createMimeMessage();
-            Address recipient = new InternetAddress(to);
-            mimeMessage.setFrom(uname);
-            mimeMessage.setRecipient(Message.RecipientType.TO, recipient);
-            mimeMessage.setSubject(subject);
-            mimeMessage.setText(body);
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+            helper.setFrom(uname);
+            helper.setTo(to);
+            helper.setSubject(subject);
+            helper.setText(body, true);
             mailSender.send(mimeMessage);
 
             return true;
