@@ -30,7 +30,7 @@ public class WebSecurityConfig {
         httpSecurity.csrf().disable()
                 .cors().and()
                 .authorizeHttpRequests()
-                .requestMatchers("/auth/login", "/user/sign-up", "user/forgotPassword")
+                .requestMatchers("/auth/login", "/user/sign-up", "user/forgotPassword", "user/getUser/*", "user/resetPassword")
                 .permitAll()
                 .anyRequest()
                 .authenticated()

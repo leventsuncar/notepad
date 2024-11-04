@@ -9,6 +9,7 @@ import com.lsuncar.notepad.core.util.ResourceBundleUtil;
 import com.lsuncar.notepad.db.dao.UserDAO;
 import com.lsuncar.notepad.dto.UserDTO;
 import com.lsuncar.notepad.service.UserService;
+import com.lsuncar.notepad.util.MailUtil;
 import com.lsuncar.notepad.uto.req.UserRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +32,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private SMTPUtil smtpUtil;
+
+    @Autowired
+    private MailUtil mailUtil;
 
     @Override
     public UserDTO signup(UserRequest userRequest) throws Exception {
@@ -82,16 +86,18 @@ public class UserServiceImpl implements UserService {
             UserDTO userDTO = userDAO.findUserByEmail(email);
             if (nonNull(userDTO)) {
                 smtpUtil.sendMail(userDTO.getEmail(),
-                        ResourceBundleUtil.getLocaleText("", "tr_TR"),
-                        Constants.RESET_PASSWORD_MAIL);
+                        ResourceBundleUtil.getLocaleText("passwordResetMailHeader", "tr_TR"),
+                        mailUtil.createMailText( "tr_TR", userDTO.getId() ));
                 return new SuccessResult( "email send" );
 
 
             } else
-                throw new EntityNotFoundException(""); //Emailin yanlış olduğu ile ilgili bilgi vermemek lazım!
+                throw new EntityNotFoundException(""); //Emailin yanlış olduğu ile ilgili bilgi vermemek lazım! //TODO göndermiş gibi yap. Eğer gelmezse tekrar dene de
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             throw e;
         }
     }
+
+
 }

@@ -1,9 +1,6 @@
 package com.lsuncar.notepad.core.messaging.email;
 
 import com.lsuncar.notepad.core.exception.EmailException;
-import jakarta.mail.Address;
-import jakarta.mail.Message;
-import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
